@@ -8,8 +8,8 @@ const server = http.createServer((req, res) => {
     header['Access-Control-Allow-Credentials'] = true;
 
     let body;
-    const domain = header['Access-Control-Allow-Origin'].replace('http://', '').replace(':', '-');
-    const path = `./${domain}/${req.url}/${req.method}`;
+    const origin = header['Access-Control-Allow-Origin'].replace('http://', '').replace(':', '-');
+    const path = `./${origin}/${req.url}/${req.method}`;
     if (fs.existsSync(path)) {
         body = fs.readFileSync(path);
     }
