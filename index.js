@@ -9,7 +9,8 @@ const server = http.createServer((req, res) => {
 
     let body;
     const origin = header['Access-Control-Allow-Origin'].replace('http://', '').replace(':', '-');
-    const path = `./${origin}/${req.url}/${req.method}`;
+    const url = req.url.split('?').shift();
+    const path = `./${origin}/${url}/${req.method}`;
     if (fs.existsSync(path)) {
         body = fs.readFileSync(path);
     }
