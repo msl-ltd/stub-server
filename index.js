@@ -2,10 +2,11 @@ const http = require('http');
 const fs = require('fs');
 
 const server = http.createServer((req, res) => {
-    const header = {};
-    header['Access-Control-Allow-Origin'] = req.headers.origin;
-    header['Access-Control-Allow-Headers'] = 'Content-Type';
-    header['Access-Control-Allow-Credentials'] = true;
+    const header = {
+        'Access-Control-Allow-Origin': req.headers.origin,
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Credentials': true,
+    };
 
     let body;
     const origin = header['Access-Control-Allow-Origin'].replace('http://', '').replace(':', '-');
