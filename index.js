@@ -16,7 +16,7 @@ function getCommandLineValue(argv, argKey) {
     return argValue;
 }
 
-let status = +(getCommandLineValue(process.argv.slice(2), 'status') ?? 200);
+const status = +(getCommandLineValue(process.argv.slice(2), 'status') ?? 200);
 
 const server = http.createServer((req, res) => {
     const header = {
