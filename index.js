@@ -4,8 +4,7 @@ const fs = require('fs');
 function getCommandLineValue(argv, argKey) {
     let argValue;    
 
-    for (let i = 0; i < argv.length; i++) {
-        const arg = argv[i];
+    for (const arg of argv) {
         const [key, value] = arg.split('=');
         if (key === argKey) {
             argValue = value;
