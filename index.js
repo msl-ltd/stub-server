@@ -15,6 +15,7 @@ function getCommandLineValue(argv, argKey) {
     return argValue;
 }
 
+const port = +(getCommandLineValue(process.argv.slice(2), 'port') ?? 3000);
 const status = +(getCommandLineValue(process.argv.slice(2), 'status') ?? 200);
 
 const server = http.createServer((req, res) => {
@@ -36,4 +37,4 @@ const server = http.createServer((req, res) => {
     res.end(body);
 });
 
-server.listen(3000);
+server.listen(port);
