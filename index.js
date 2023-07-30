@@ -1,4 +1,5 @@
 const http = require('http');
+const url = require('url');
 const fs = require('fs');
 
 function getCommandLineValue(argv, argKey) {
@@ -26,16 +27,29 @@ const server = http.createServer((req, res) => {
     'Access-Control-Allow-Credentials': true,
   };
 
-  let body;
+  let resBody;
   const origin = header['Access-Control-Allow-Origin'].replace('http://', '').replace(':', '-');
-  const url = req.url.split('?').shift();
-  const path = `./${origin}/${url}/${req.method}/${status}`;
+  const endPoint = req.url.split('?').shift();
+  const path = `./${origin}/${endPoint}/${req.method}/${status}`;
   if (fs.existsSync(path)) {
-      body = fs.readFileSync(path);
+      resBody = fs.readFileSync(path);
   }
 
   res.writeHead(req.method === 'OPTIONS' ? 200 : status, header);
-  res.end(body);
+  res.end(resBody);
+
+  let reqBody = '';
+  req
+    .on('data', (chunk) => (reqBody += chunk))
+    .on('end', () => {
+      if (req.method !== 'OPTIONS') {
+        console.log(`${req.method}:${endPoint}`);
+        console.log(url.parse(req.url).search);
+        console.log(reqBody ? JSON.parse(reqBody) : '');
+        console.log(`${status}`);
+        console.log(`${(resBody ?? '').toString()}`);
+      }
+    });
 });
 
 server.listen(port);
