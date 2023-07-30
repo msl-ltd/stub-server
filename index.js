@@ -15,8 +15,9 @@ function getCommandLineValue(argv, argKey) {
   return argValue;
 }
 
-const port = +(getCommandLineValue(process.argv.slice(2), 'port') ?? 3000);
-const status = +(getCommandLineValue(process.argv.slice(2), 'status') ?? 200);
+const argv = process.argv.slice(2);
+const port = +(getCommandLineValue(argv, 'port') ?? 3000);
+const status = +(getCommandLineValue(argv, 'status') ?? 200);
 
 const server = http.createServer((req, res) => {
   const header = {
