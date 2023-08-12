@@ -20,36 +20,38 @@ const argv = process.argv.slice(2);
 const port = +(getCommandLineValue(argv, 'port') ?? 3000);
 const status = +(getCommandLineValue(argv, 'status') ?? 200);
 
-const server = http.createServer((req, res) => {
-  const header = {
-    'Access-Control-Allow-Origin': req.headers.origin,
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Credentials': true,
-  };
+http
+  .createServer((req, res) => {
+    let reqBody = '';
 
-  let resBody;
-  const origin = header['Access-Control-Allow-Origin'].replace('http://', '').replace(':', '-');
-  const endPoint = req.url.split('?').shift();
-  const path = `./${origin}/${endPoint}/${req.method}/${status}`;
-  if (fs.existsSync(path)) {
-      resBody = fs.readFileSync(path);
-  }
+    req
+      .on('data', (chunk) => (reqBody += chunk))
+      .on('end', () => {
+        const reqHost = req.headers.host?.replace(':', '-') || '';
+        const reqUrl = url.parse(req.url);
+        const resFile = `./${reqHost}/${reqUrl.pathname}/${req.method}/${status}`;
+        let resBody;
 
-  res.writeHead(req.method === 'OPTIONS' ? 200 : status, header);
-  res.end(resBody);
+        if (fs.existsSync(resFile)) resBody = fs.readFileSync(resFile);
 
-  let reqBody = '';
-  req
-    .on('data', (chunk) => (reqBody += chunk))
-    .on('end', () => {
-      if (req.method !== 'OPTIONS') {
-        console.log(`${req.method}:${endPoint}`);
-        console.log(url.parse(req.url).search);
-        console.log(reqBody ? JSON.parse(reqBody) : '');
-        console.log(`${status}`);
-        console.log(`${(resBody ?? '').toString()}`);
-      }
-    });
-});
+        res.writeHead(req.method === 'OPTIONS' ? 200 : status, {
+          'Access-Control-Allow-Headers': req.headers.origin || '*',
+          'Access-Control-Allow-Origin': '*',
+          // 'Access-Control-Allow-Methods': '*',
+          // 'Access-Control-Allow-Credentials': true,
+        });
+        res.end(resBody);
 
-server.listen(port);
+        console.table({
+          reqPoint: `${req.method}:${reqUrl.pathname}`,
+          reqQuery: reqUrl.query ?? '',
+          reqBody: reqBody ? JSON.parse(reqBody) : '',
+          '---': '---',
+          resStatus: status,
+          resFile: resFile,
+          resBody: resBody ? 'output below ...' : '',
+        });
+        if (resBody) console.log(`${resBody}`);
+      });
+  })
+  .listen(port);
