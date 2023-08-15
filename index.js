@@ -2,23 +2,23 @@ const http = require('http');
 const url = require('url');
 const fs = require('fs');
 
-function getCommandLineValue(argv, argKey) {
-  let argValue;
+function getArgvValue(argv, key) {
+  let Value;
 
   for (const arg of argv) {
-    const [key, value] = arg.split('=');
-    if (key === argKey) {
-      argValue = value;
+    const [argKey, argValue] = arg.split('=');
+    if (argKey === key) {
+      Value = argValue;
       break;
     }
   }
 
-  return argValue;
+  return Value;
 }
 
 const argv = process.argv.slice(2);
-const port = +(getCommandLineValue(argv, 'port') ?? 3000);
-const status = +(getCommandLineValue(argv, 'status') ?? 200);
+const port = +(getArgvValue(argv, 'port') ?? 3000);
+const status = +(getArgvValue(argv, 'status') ?? 200);
 
 http
   .createServer((req, res) => {
@@ -37,8 +37,8 @@ http
         res.writeHead(req.method === 'OPTIONS' ? 200 : status, {
           'Access-Control-Allow-Headers': req.headers.origin || '*',
           'Access-Control-Allow-Origin': '*',
-          // 'Access-Control-Allow-Methods': '*',
           // 'Access-Control-Allow-Credentials': true,
+          // 'Access-Control-Allow-Methods': '*',
         });
         res.end(resBody);
 
