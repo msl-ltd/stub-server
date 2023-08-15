@@ -43,13 +43,13 @@ http
         res.end(resBody);
 
         console.table({
-          reqPoint: `${req.method}:${reqUrl.pathname}`,
-          reqQuery: reqUrl.query ?? '',
-          reqBody: reqBody ? JSON.parse(reqBody) : '',
+          path: `${req.method}:${reqUrl.pathname}`,
+          query: reqUrl.query ?? '',
+          body: reqBody ? JSON.parse(reqBody) : '',
           '---': '---',
-          resStatus: status,
-          resFile: resFile,
-          resBody: resBody ? 'output below ...' : '',
+          status: status,
+          file: resFile,
+          chunk: resBody ? 'output below ...' : '',
         });
         if (resBody) console.log(`${resBody}`);
       });
