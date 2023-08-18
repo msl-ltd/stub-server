@@ -27,7 +27,7 @@ http
     req
       .on('data', (chunk) => (reqBody += chunk))
       .on('end', () => {
-        const reqHost = req.headers.host?.replace(':', '-') || '';
+        const reqHost = req.headers.origin?.replace(':', '-') || '';
         const reqUrl = url.parse(req.url);
         const resFile = `./${reqHost}/${reqUrl.pathname}/${req.method}/${status}`;
         let resBody;
