@@ -18,7 +18,7 @@ function getArgvValue(argv, key) {
 
 const argv = process.argv.slice(2);
 const port = +(getArgvValue(argv, 'port') ?? 3000);
-const status = +(getArgvValue(argv, 'status') ?? 200);
+const resStatus = +(getArgvValue(argv, 'status') ?? 200);
 
 http
   .createServer((req, res) => {
@@ -29,12 +29,12 @@ http
       .on('end', () => {
         const reqHost = req.headers.origin?.replace(':', '-') || '';
         const reqUrl = url.parse(req.url);
-        const resFile = `./${reqHost}/${reqUrl.pathname}/${req.method}/${status}`;
+        const resFile = `./${reqHost}/${reqUrl.pathname}/${req.method}/${resStatus}`;
         let resBody;
 
         if (fs.existsSync(resFile)) resBody = fs.readFileSync(resFile);
 
-        res.writeHead(req.method === 'OPTIONS' ? 200 : status, {
+        res.writeHead(req.method === 'OPTIONS' ? 200 : resStatus, {
           'Access-Control-Allow-Origin': req.headers.origin || '*',
           'Access-Control-Allow-Headers': req.headers['access-control-request-headers'] || '*',
           // 'Access-Control-Allow-Credentials': true,
@@ -46,7 +46,7 @@ http
           query: reqUrl.query ?? '',
           body: reqBody ? JSON.parse(reqBody) : '',
           '---': '---',
-          status: status,
+          status: resStatus,
           file: resFile,
           chunk: resBody ? 'output below ...' : '',
         });
