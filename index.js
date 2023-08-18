@@ -44,13 +44,20 @@ http
         console.table({
           path: `${req.method}:${reqUrl.pathname}`,
           query: reqUrl.query ?? '',
-          body: reqBody ? JSON.parse(reqBody) : '',
+          body: reqBody ? 'output below ...' : '',
           '---': '---',
           status: resStatus,
           file: resFile,
           chunk: resBody ? 'output below ...' : '',
         });
-        if (resBody) console.log(`${resBody}`);
+        if (body) {
+          console.log('body');
+          console.log(JSON.parse(reqBody));
+        }
+        if (resBody) {
+          console.log('chunk');
+          console.log(`${resBody}`);
+        }
       });
   })
   .listen(port);
