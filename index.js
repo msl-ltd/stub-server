@@ -27,9 +27,9 @@ http
     req
       .on('data', (chunk) => (reqBody += chunk))
       .on('end', () => {
-        const reqHost = req.headers.origin?.replace(':', '-') || '';
+        const reqOrigin = req.headers.origin?.replace('http://', '').replace(':', '-') || '';
         const reqUrl = url.parse(req.url);
-        const resFile = `./${reqHost}/${reqUrl.pathname}/${req.method}/${resStatus}`;
+        const resFile = `./${reqOrigin}/${reqUrl.pathname}/${req.method}/${resStatus}`;
         let resBody;
 
         if (fs.existsSync(resFile)) resBody = fs.readFileSync(resFile);
@@ -50,7 +50,7 @@ http
           file: resFile,
           chunk: resBody ? 'output below ...' : '',
         });
-        if (body) {
+        if (reqBody) {
           console.log('body');
           console.log(JSON.parse(reqBody));
         }
