@@ -35,10 +35,9 @@ http
         if (fs.existsSync(resFile)) resBody = fs.readFileSync(resFile);
 
         res.writeHead(req.method === 'OPTIONS' ? 200 : status, {
-          'Access-Control-Allow-Headers': req.headers.origin || '*',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': req.headers.origin || '*',
+          'Access-Control-Allow-Headers': req.headers['access-control-request-headers'] || '*',
           // 'Access-Control-Allow-Credentials': true,
-          // 'Access-Control-Allow-Methods': '*',
         });
         res.end(resBody);
 
