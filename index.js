@@ -1,5 +1,6 @@
 const http = require('http');
 const url = require('url');
+const querystring = require('querystring');
 const fs = require('fs');
 
 function getArgvValue(argv, key) {
@@ -41,23 +42,24 @@ http
         });
         res.end(resBody);
 
-        console.table({
-          path: `${req.method}:${reqUrl.pathname}`,
-          query: reqUrl.query ?? '',
-          body: reqBody ? 'output below ...' : '',
-          '---': '---',
-          status: resStatus,
-          file: resFile,
-          chunk: resBody ? 'output below ...' : '',
-        });
+        console.log('---');
+        console.log(`path  : ${req.method} ${reqUrl.pathname}`);
+        if (reqUrl.query) {
+          console.log('query :');
+          console.log(JSON.parse(JSON.stringify(querystring.parse(reqUrl.query))));
+        }
         if (reqBody) {
-          console.log('body');
+          console.log('body  :');
           console.log(JSON.parse(reqBody));
         }
+        console.log(`status: ${resStatus}`);
+        console.log(`file  : ${resFile}`);
         if (resBody) {
-          console.log('chunk');
+          console.log('chunk:');
           console.log(`${resBody}`);
         }
       });
   })
   .listen(port);
+
+console.log(`Server running at http://localhost:${port}/`);
