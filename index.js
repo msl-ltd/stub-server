@@ -56,7 +56,7 @@ http
         console.log(`file  : ${resFile}`);
         if (resBody) {
           console.log('chunk:');
-          console.log(`${resBody}`);
+          console.log(resBody.toString());
         }
       });
   })
