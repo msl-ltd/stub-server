@@ -1,7 +1,7 @@
-const http = require('http');
-const url = require('url');
-const querystring = require('querystring');
-const fs = require('fs');
+const http = require('node:http');
+const url = require('node:url');
+const querystring = require('node:querystring');
+const fs = require('node:fs');
 
 function getArgvValue(argv, key) {
   let Value;
