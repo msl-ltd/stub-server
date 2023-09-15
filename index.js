@@ -5,6 +5,10 @@ const url = require('node:url');
 const querystring = require('node:querystring');
 const fs = require('node:fs');
 
+function sleep(ms) {
+  for (const start = Date.now(); Date.now() - start < ms; );
+}
+
 function getArgvValue(argv, key) {
   let Value;
 
@@ -22,6 +26,7 @@ function getArgvValue(argv, key) {
 const argv = process.argv.slice(2);
 const port = +(getArgvValue(argv, 'port') ?? 3000);
 const resStatus = +(getArgvValue(argv, 'status') ?? 200);
+const resSleep = +(getArgvValue(argv, 'sleep') ?? 0);
 
 http
   .createServer((req, res) => {
@@ -30,6 +35,8 @@ http
     req
       .on('data', (chunk) => (reqBody += chunk))
       .on('end', () => {
+        sleep(resSleep);
+        
         const reqOrigin = req.headers.origin?.replace('http://', '').replace(':', '-') || '';
         const reqUrl = url.parse(req.url);
         const resFile = `./${reqOrigin}/${reqUrl.pathname}/${req.method}/${resStatus}`;
