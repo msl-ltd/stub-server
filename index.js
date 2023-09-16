@@ -10,17 +10,17 @@ function sleep(ms) {
 }
 
 function getArgvValue(argv, key) {
-  let Value;
+  let value;
 
   for (const arg of argv) {
     const [argKey, argValue] = arg.split('=');
     if (argKey === key) {
-      Value = argValue;
+      value = argValue;
       break;
     }
   }
 
-  return Value;
+  return value;
 }
 
 const argv = process.argv.slice(2);
@@ -36,7 +36,7 @@ http
       .on('data', (chunk) => (reqBody += chunk))
       .on('end', () => {
         sleep(resSleep);
-        
+
         const reqOrigin = req.headers.origin?.replace('http://', '').replace(':', '-') || '';
         const reqUrl = url.parse(req.url);
         const resFile = `./${reqOrigin}/${reqUrl.pathname}/${req.method}/${resStatus}`;
