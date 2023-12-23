@@ -37,6 +37,9 @@ http
       .on('end', () => {
         sleep(resSleep);
 
+        const cookies = Object.fromEntries(
+          req.headers.cookie?.split(';').map((keyValue) => keyValue.trim().split('=')) || ''
+        );
         const reqOrigin = req.headers.origin?.replace('http://', '').replace(':', '-') || '';
         const reqUrl = url.parse(req.url);
         const resFile = `./${reqOrigin}/${reqUrl.pathname}/${req.method}/${resStatus}`;
@@ -52,6 +55,7 @@ http
         res.end(resBody);
 
         console.log('---');
+        console.log('cookie', cookies);
         console.log(`path  : ${req.method} ${reqUrl.pathname}`);
         if (reqUrl.query) {
           console.log('query :');
