@@ -57,20 +57,18 @@ http
         res.end(resBody);
 
         console.log('---');
-        console.log('cookie', cookies);
-        console.log(`path  : ${req.method} ${reqUrl.pathname}`);
+        console.log('cookie:', cookies);
+        console.log('path  :', req.method, reqUrl.pathname);
         if (reqUrl.query) {
-          console.log('query :');
-          console.log(JSON.parse(JSON.stringify(querystring.parse(reqUrl.query))));
+          console.log('query :', JSON.parse(JSON.stringify(querystring.parse(reqUrl.query))));
         }
         if (reqBody) {
-          console.log('body  :', reqBody);
+          console.log('body  :', JSON.parse(reqBody));
         }
-        console.log(`status: ${resStatus}`);
-        console.log(`file  : ${resFile}`);
+        console.log('status:', resStatus);
+        console.log('file  :', resFile);
         if (resBody) {
-          console.log('chunk:');
-          console.log(resBody.toString());
+          console.log('chunk:', resBody.toString());
         }
       });
   })
