@@ -35,7 +35,9 @@ http
     req
       .on('data', (chunk) => (reqBody += chunk))
       .on('end', () => {
-        sleep(resSleep);
+        if (req.method !== 'OPTIONS') {
+          sleep(resSleep);
+        }
 
         const cookies = Object.fromEntries(
           req.headers.cookie?.split(';').map((keyValue) => keyValue.trim().split('=')) || ''
