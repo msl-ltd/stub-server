@@ -63,7 +63,7 @@ http
           console.log('query :', JSON.parse(JSON.stringify(querystring.parse(reqUrl.query))));
         }
         if (reqBody) {
-          console.log('body  :', JSON.parse(reqBody));
+          console.log('body  :', reqBody);
         }
         console.log('status:', resStatus);
         console.log('file  :', resFile);
